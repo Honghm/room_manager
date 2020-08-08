@@ -5,32 +5,88 @@ import {
     Image,
     StyleSheet,
     TouchableOpacity, 
+    ScrollView,
     Alert
 } from 'react-native'
 
 import ThongTin from './thongTin'
 
-const dataThongTin = [
-    {id: 0, iconLoai: '../../assets/image/icon-an-uong.png', tenLoai:'Ăn uống', noiDung: 'Đi chợ', giaTien: '100,000 vnđ'},
-    {id: 1, iconLoai: '../../assets/image/icon-mua-sam.png', tenLoai:'Mua sắm', noiDung: 'Quạt', giaTien: '200,000 vnđ'},
-    {id: 2, iconLoai: '../../assets/image/icon-suc-khoe.png', tenLoai:'Sức khỏe', noiDung: 'Thuốc ho', giaTien: '50,000 vnđ'},
+const dataThongTin1 = [
+    {id: 1, iconLoai: '1', tenLoai:'Ăn uống', noiDung: 'Đi chợ', giaTien: 100000,},
+    {id: 2, iconLoai: '2', tenLoai:'Mua sắm', noiDung: 'Quạt', giaTien: 200000},
+    {id: 3, iconLoai: '3', tenLoai:'Sức khỏe', noiDung: 'Thuốc ho', giaTien: 50000},
+   
 ]
-
+const dataThongTin2 = [
+    {id: 1, iconLoai: '1', tenLoai:'Ăn uống', noiDung: 'Đi chợ', giaTien: 100000,},
+    {id: 2, iconLoai: '2', tenLoai:'Mua sắm', noiDung: 'Quạt', giaTien: 200000},
+    {id: 3, iconLoai: '4', tenLoai:'Khác', noiDung: 'Tiền trọ tháng 8', giaTien: 1200000},
+   
+]
+const dataThongTin3 = [
+    {id: 1, iconLoai: '1', tenLoai:'Ăn uống', noiDung: 'Đi chợ', giaTien: 100000,},
+    {id: 2, iconLoai: '2', tenLoai:'Mua sắm', noiDung: 'Quạt', giaTien: 200000},
+    {id: 3, iconLoai: '4', tenLoai:'Khác', noiDung: 'Tiền trọ tháng 8', giaTien: 1200000},
+    {id: 4, iconLoai: '2', tenLoai:'Mua sắm', noiDung: 'Quạt', giaTien: 200000},
+   
+]
+var tongTien = 0;
+var heightContainer;
+var dataThongTin = [];
+var day_of_week;
 export default function ItemThongTin(params) {
+    var {listData} = params;
+    var dd = listData.ngayMua.slice(0,2);
+    var mm = listData.ngayMua.slice(3,5);
+    var yyyy = listData.ngayMua.slice(6,10);
+    day_of_week = get_day(dd, mm, yyyy);
+ 
+    switch (listData.idData) {
+        case 1:
+            dataThongTin = dataThongTin1;
+            tongTien = 0;
+            heightContainer = 60 + dataThongTin.length*25;
+            break;
+        case 2:
+            tongTien = 0;
+            dataThongTin = dataThongTin2;
+            heightContainer = 60 + dataThongTin.length*25;
+            break;
+        case 3:
+            tongTien = 0;
+            dataThongTin = dataThongTin3;
+            heightContainer = 60 + dataThongTin.length*25;
+            break;
+        default:
+    }
+    dataThongTin.map((data)=>{
+        tongTien += data.giaTien;
+    });
   
-    return <View>
-      <View style = {styles.item}>
-              <View style = {{height: 130, justifyContent:'space-around'}}>
+    return <View style = {{paddingBottom: 10}}>
+      <View style = {{height: heightContainer, 
+      display: 'flex', flexDirection: 'row', 
+      backgroundColor:'white',
+      borderRadius: 20,
+      padding: 5}}>
+                {/* ngày tháng */}
+              <View style = {{height: heightContainer, justifyContent:'space-around'}}>
                 <View style = {styles.date}>
                     <View style = {{width: 60, height: 30, alignItems:'center', flexDirection:'row', justifyContent:'center'}}>
-                        <Text style= {{fontSize: 12, fontFamily: 'Segoe UI'}}>Thứ </Text>
-                        <Text style= {{fontSize: 25, fontFamily: 'Segoe UI', fontWeight: 'bold'}}>2</Text>
+                     {
+                        day_of_week == 'CN' ? <Text/> :<Text style= {{fontSize: 12, fontFamily: 'Segoe UI'}}> Thứ </Text>
+                     } 
+                   
+                        <Text style= {{fontSize: 24, fontFamily: 'Segoe UI', fontWeight: 'bold'}}>{day_of_week}</Text>
                     </View>
-                    <Text style= {{fontSize: 12, fontFamily: 'Segoe UI'}}>3/8</Text>
-                    <Text style= {{fontSize: 12, fontFamily: 'Segoe UI', paddingBottom: 3}}>2020</Text>
+                    <Text style= {{fontSize: 12, fontFamily: 'Segoe UI'}}>{dd}/{mm}</Text>
+                    <Text style= {{fontSize: 12, fontFamily: 'Segoe UI', paddingBottom: 3}}>{yyyy}</Text>
                 </View>
               </View>
-              <View style = {{display: 'flex', flexDirection: 'column'}}>
+              
+              <View style = {{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+     
+                  {/* Tiêu đề */}
                 <View style = {{display: 'flex', flexDirection: 'row'}}>
                     <View style ={{width: 90, alignItems: 'center'}}>
                         <Text style = {{fontSize: 14, fontFamily: 'Segoe UI', fontWeight: 'bold',}} >Loại</Text>
@@ -42,11 +98,25 @@ export default function ItemThongTin(params) {
                         <Text style = {{fontSize: 14, fontFamily: 'Segoe UI', fontWeight: 'bold',}}>Giá tiền</Text>
                     </View>
                 </View>
+                
+                {/* list Thông tin */}
                 <View>
+                <View style = {{justifyContent: 'space-between'}}>
                     {dataThongTin.map(data =>(
                         <ThongTin key = {data.id} data = {data}/>
                     ))}
                 </View>
+                    <View style = {{flexDirection:'row'}}>
+                        <View style = {{paddingLeft:20, paddingRight: 20}}>
+                            <Text style = {{fontSize: 14, fontFamily: 'Segoe UI', fontWeight: 'bold',color: 'red'}}>TỔNG CHI: {tongTien} vnđ</Text>
+                        </View>
+                        <TouchableOpacity>
+                            <Text style = {{fontSize: 14, fontFamily: 'Segoe UI', fontWeight: 'bold', color: '#054FFC', textDecorationLine:'underline'}}>Xem chi tiết</Text>
+                        </TouchableOpacity>
+                    
+                    </View>
+                </View>
+              
               </View>
              
           </View>
@@ -56,7 +126,7 @@ export default function ItemThongTin(params) {
 
 const styles = StyleSheet.create({
     item:{
-        height: 130,
+        height: heightContainer,
         display: 'flex',
         flexDirection: 'row',
         backgroundColor:'white',
@@ -73,6 +143,31 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         flexDirection: 'column',
         alignItems: 'center'
-    }
-  
+    },
+   
 });
+
+function get_day(dd, mm, yyyy) {
+    var JMD = Math.round((Number(dd)  + ((153 * (Number(mm) + 12 * ((14 - Number(mm)) / 12) - 3) + 2) / 5) +
+    (365 * (Number(yyyy) + 4800 - ((14 - Number(mm)) / 12))) +
+    ((Number(yyyy) + 4800 - ((14 - Number(mm)) / 12)) / 4) - 
+   ((Number(yyyy) + 4800 - ((14 - Number(mm)) / 12)) / 100) + 
+   ((Number(yyyy) + 4800 - ((14 - Number(mm)) / 12)) / 400)  - 32045) % 7);
+   switch (JMD) {
+    case 0:
+        return 'CN';
+     case 1:
+        return '2';
+     case 2:
+        return '3';
+     case 3:
+        return '4';
+     case 4:
+        return '5';
+     case 5:
+        return '6';
+     case 6:
+        return '7';
+    }
+     
+}

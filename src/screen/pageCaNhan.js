@@ -5,14 +5,27 @@ import {
     Image,
     StyleSheet,
     TouchableOpacity, 
-    Alert
+    ScrollView,
+    Alert, 
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient';
 import ItemThongTin from '../component/itemThongTin'
 
 
 export default class PageCaNhan extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            dataKhoanChi:[
+                {id: 1, ngayMua: '03/08/2020', idData: 1},
+                {id: 2, ngayMua: '04/08/2020', idData: 2},
+                {id: 3, ngayMua: '19/08/2020', idData: 3},
+                {id: 4, ngayMua: '09/08/2020', idData: 3}
+            ]
+        };
+    }
     render(){
+        const {dataKhoanChi} = this.state;
         return  <LinearGradient 
         colors ={['#42AF3B','#17B6A0']} 
         style = {{flex: 5,}}
@@ -48,16 +61,20 @@ export default class PageCaNhan extends React.Component {
                                 </TouchableOpacity>
                             </View>
                         </View>
+                        
+                        
                         {/*list thông tin */}
-                        <View>
-                            <ItemThongTin/>
-                        </View>
+                        <ScrollView>
+                            {dataKhoanChi.map((data)=> (
+                                <ItemThongTin key = {data.id} listData = {data}></ItemThongTin>
+                            ))}
+                            </ScrollView>
                     </View>
 
                     {/*bottom app bar */}
-                    <View>
+                    <View style = {{backgroundColor: '#17B6A0'}}>
                         <View>
-                            <View style = {{height: 25, alignItems: 'center', backgroundColor: '#CDCCCC', }}>
+                            <View style = {{height: 25, alignItems: 'center', backgroundColor: '#CDCCCC' }}>
                                 <View style = {{width: 50, height: 50, backgroundColor: '#2CDC07', borderRadius: 25, alignItems: 'center', 
                                 paddingTop: 12,  shadowOpacity: 0, shadowRadius: 20, shadowColor: 'black', shadowOffset: {width: 0, height: 0}}}>
                                     <TouchableOpacity onPress = {()=> Alert.alert("hello")} >
@@ -114,7 +131,10 @@ const styles = StyleSheet.create({
         height: 585,
         backgroundColor: 'rgb(205,204,204)',
         flexDirection: 'column',
-        padding: 10
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 10,
+        
     },
     buttom_app_bar:{
 
