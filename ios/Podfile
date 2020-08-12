@@ -8,6 +8,8 @@ target 'room_manager' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'room_managerTests' do
     inherit! :complete
     # Pods for testing
