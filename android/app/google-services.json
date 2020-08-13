@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "409213120891",
+    "firebase_url": "https://room-manager-d0991.firebaseio.com",
+    "project_id": "room-manager-d0991",
+    "storage_bucket": "room-manager-d0991.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:409213120891:android:f5734e83665fdaaab14dde",
+        "android_client_info": {
+          "package_name": "com.room_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "409213120891-9qofqq4g5012cr0uvboot1ochh1m549g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.room_manager",
+            "certificate_hash": "851482f8cbdca687b98eab2382b88b84a4ecc763"
+          }
+        },
+        {
+          "client_id": "409213120891-h6cob5n4dcfji2qepo0805cicfu28doa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhN10LPOEb3G9AGHFD_15FaOdngaKvSEA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "409213120891-h6cob5n4dcfji2qepo0805cicfu28doa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

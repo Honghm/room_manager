@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
 KhoanThu = ()=><View style = {styles.center}>

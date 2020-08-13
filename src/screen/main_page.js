@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { Button, View, Text, Image, StyleSheet, TouchableOpacity,Animated } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
@@ -14,10 +14,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const BottomTab = createBottomTabNavigator();
 let title;
+function TabDemo(params) {
+  return<View style = {{flex: 1, }}></View>
+} 
 
 export default class MainPage extends React.Component {
 
-  
+ 
   render(){
     console.log(this.props);
     return(
@@ -42,13 +45,14 @@ export default class MainPage extends React.Component {
              :((this.props.route.state.index != 0 ?
              "QUẢN LÝ CHI TIÊU NHÓM":"QUẢN LÝ CHI TIÊU CÁ NHÂN"))}</Text>
             </View>
-
-            <View style = {{flex: 4,}}>
-              <BottomTab.Navigator tabBar = {props =><BottomTabBar {...props}/>}>
+         
+            <View style = {{flex: 4, }}>
+           <View style = {{flex: 1,}}>
+           <BottomTab.Navigator tabBar = {props =><BottomTabBar {...props}/>}>
                   <BottomTab.Screen name = "tabCaNhan" component = {TabCaNhan} />
-                  <BottomTab.Screen name = "tabThem" component = {Tab3} />
                   <BottomTab.Screen name = "tabNhom" component = {TabNhom} />
               </BottomTab.Navigator>
+           </View>
             </View>
           
           </View>

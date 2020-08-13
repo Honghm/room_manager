@@ -11,7 +11,7 @@ function BottomTabBar({ state, descriptors, navigation }) {
   }
 
   return (
-    <View style={{ flexDirection: 'row', height:60, justifyContent:'center', alignItems: 'center' }}>
+    <View style={{ flexDirection: 'row', height:40, justifyContent:'center', alignItems: 'center' }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -35,48 +35,31 @@ function BottomTabBar({ state, descriptors, navigation }) {
           }
         };
         return (
-         <View style = {{flex: 1, height: 60}}>
+         <View style = {{flex: 1, height: 40}}>
              {
-                 (route.name =="tabCaNhan")? (<View style = {stytes.tabCaNhan}>
+                 (route.name =="tabCaNhan")? (<View style = {stytes.tabIcon}>
                      <TouchableOpacity onPress = {onPress}>
                          <View style = {stytes.icon}>
                             <Icon 
                             name="account" 
                             color= {!isFocused?'black':'red'} 
-                            size= {30}
+                            size= {28}
                             />
                          </View>
                      </TouchableOpacity>
                  </View>)
-                 :((route.name =="tabThem")?(<View style = {stytes.tabThem}>
-                      <TouchableOpacity onPress = {onPress}>
-                      <View style = {{width: 50, height: 50, borderRadius: 25, backgroundColor:!isFocused?'#2CDC07':'#76E65E', alignItems: 'center', paddingTop: 4}}>
-                      <Icon 
-                            name="plus" 
-                            color= {'white'} 
-                            size= {40}
-                            />
-                      </View>
-                      </TouchableOpacity>
-                 </View>)
-                 :(<View style = {stytes.tabNhom}>
-                      <TouchableOpacity onPress = {onPress}>
-                      <View style = {stytes.icon}>
-                      <TouchableOpacity onPress = {onPress}>
-                         <View style = {stytes.icon}>
-                            <Icon 
-                            name="account-multiple" 
-                            color= {!isFocused?'black':'red'} 
-                            size= {30}
-                            />
-                         </View>
-                     </TouchableOpacity>
-                      </View>
-                      </TouchableOpacity>
-                 </View>))
-                 
+                 :(<View style = {stytes.tabIcon}>
+                  <TouchableOpacity onPress = {onPress}>
+                     <View style = {stytes.icon}>
+                        <Icon 
+                        name="account-multiple" 
+                        color= {!isFocused?'black':'red'} 
+                        size= {28}
+                        />
+                     </View>
+                 </TouchableOpacity>
+             </View>)
              }
-            
          </View>
         );
       })}
@@ -87,21 +70,15 @@ function BottomTabBar({ state, descriptors, navigation }) {
 export default BottomTabBar;
 
 const stytes = StyleSheet.create({
-    tabCaNhan:{
-        flex: 1, height: 50,  alignItems: 'center', marginTop: 10
+    tabIcon:{
+        flex: 1, height: 40,  alignItems: 'center', marginTop: 5
     },
-    tabThem:{
-        flex: 1, height: 50, alignItems: 'center', marginTop: 5
-    },
-    tabNhom:{
-        flex: 1, height: 50, alignItems: 'center', marginTop: 10
-    }, 
     icon:{
-        width: 40, 
-        height: 40, 
-        borderRadius: 20, 
+        width: 30, 
+        height: 30,
+        borderRadius: 15, 
         backgroundColor:'white',
         alignItems: 'center',
-        paddingTop: 3
-    }
+    }, 
+  
 })
