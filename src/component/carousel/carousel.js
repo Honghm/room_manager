@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import { View, Text, StyleSheet, Dimensions, FlatList, Animated } from 'react-native'
 import CarouselItem from './carousel_item'
 
 
 const { width, heigth } = Dimensions.get('screen')
-let flatList
 
-function infiniteScroll(dataList){
+
+function infiniteScroll(dataList, _flatList){
     const numberOfData = dataList.length
     let scrollValue = 0, scrolled = 0
-
+   
     setInterval(function() {
         scrolled ++
         if(scrolled < numberOfData)
@@ -20,20 +20,21 @@ function infiniteScroll(dataList){
             scrolled = 0
         }
 
-        this.flatList.scrollToOffset({ animated: true, offset: scrollValue})
+        _flatList.scrollToOffset({ animated: true, offset: scrollValue})
         
     }, 5000)
 }
 
 
 const Carousel = ({ data }) => {
+    let _flatList = useRef(null);
     const scrollX = new Animated.Value(1)
     let position = Animated.divide(scrollX, width)
     const [dataList, setDataList] = useState(data)
 
     useEffect(()=> {
         setDataList(data)
-        infiniteScroll(dataList)
+        infiniteScroll(dataList,_flatList )
     })
 
 
@@ -41,7 +42,7 @@ const Carousel = ({ data }) => {
         return (
             <View style = {{justifyContent: 'space-between'}}>
                 <FlatList data={data}
-                ref = {(flatList) => {this.flatList = flatList}}
+                ref = {f =>_flatList = f}
                     keyExtractor={(item, index) => 'key' + index}
                     horizontal
                     pagingEnabled

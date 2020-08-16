@@ -1,141 +1,131 @@
-import React from 'react'
+import React, { Component } from 'react'
 import {
     View,
     Text,
-    Image,
     StyleSheet,
-    TouchableOpacity, 
-    ScrollView,
-    Alert,
-    FlatList
+    TouchableOpacity
+  
 } from 'react-native'
-
+import {firebaseApp} from '../../../component/FirebaseConfig'
 import ItemKhoanChi from './itemKhoanChi'
 
-const listKhoanChi1 = [
-    {id: 1, iconLoai: '1', tenLoai:'Ăn uống', noiDung: 'Đi chợ', giaTien: 100000,},
-    {id: 2, iconLoai: '2', tenLoai:'Mua sắm', noiDung: 'Quạt', giaTien: 200000},
-    {id: 3, iconLoai: '3', tenLoai:'Sức khỏe', noiDung: 'Thuốc ho', giaTien: 50000},
-   
-]
-const listKhoanChi2 = [
-    {id: 1, iconLoai: '1', tenLoai:'Ăn uống', noiDung: 'Đi chợ', giaTien: 100000,},
-    {id: 2, iconLoai: '2', tenLoai:'Mua sắm', noiDung: 'Quạt', giaTien: 200000},
-    {id: 3, iconLoai: '4', tenLoai:'Khác', noiDung: 'Tiền trọ tháng 8', giaTien: 1200000},
-   
-]
-const listKhoanChi3 = [
-    {id: 1, iconLoai: '1', tenLoai:'Ăn uống', noiDung: 'Đi chợ', giaTien: 100000,},
-    {id: 2, iconLoai: '2', tenLoai:'Mua sắm', noiDung: 'Quạt', giaTien: 200000},
-    {id: 3, iconLoai: '4', tenLoai:'Khác', noiDung: 'Tiền trọ tháng 8', giaTien: 1200000},
-    {id: 4, iconLoai: '2', tenLoai:'Mua sắm', noiDung: 'Quạt', giaTien: 200000},
-   
-]
-var tongTien = 0;
-var heightContainer;
-var listKhoanChi = [];
-var day_of_week;
-export default function ListKhoanChi(params) {
-    var {listData} = params;
-    var dd = listData.ngayMua.slice(0,2);
-    var mm = listData.ngayMua.slice(3,5);
-    var yyyy = listData.ngayMua.slice(6,10);
-    day_of_week = get_day(dd, mm, yyyy);
- 
-    switch (listData.idData) {
-        case 1:
-            listKhoanChi = listKhoanChi1;
-            tongTien = 0;
-            heightContainer = 60 + listKhoanChi.length*30;
-            break;
-        case 2:
-            tongTien = 0;
-            listKhoanChi = listKhoanChi2;
-            heightContainer = 60 + listKhoanChi.length*30;
-            break;
-        case 3:
-            tongTien = 0;
-            listKhoanChi = listKhoanChi3;
-            heightContainer = 60 + listKhoanChi.length*30;
-            break;
-        default:
+
+
+
+const itemRef = firebaseApp.database(); 
+
+export default class ListKhoanChi extends Component {
+  constructor(props){
+      super(props);
+      this.itemRef = firebaseApp.database();
+      this.state = {
+        dataSource: [],
+        tongTien: 0,
+        heightContainer: 0
     }
-    listKhoanChi.map((data)=>{
+   
+  }
+   getData(idData){
+   
+    
+    this.itemRef.ref('KhoanChi').child(idData).child('data').on('child_added', (dataSnapshot)=>{
+        var item = [];
+        item.push({
+            id: dataSnapshot.key,
+            iconLoai: dataSnapshot.child('iconLoai').val(),
+            tenLoai: dataSnapshot.child('tenLoai').val(),
+            noiDung: dataSnapshot.child('noiDung').val(),
+            giaTien: dataSnapshot.child('giaTien').val(),
+        })
+       this.setState(
+        this.state.dataSource  = this.state.dataSource.concat(item)
+    )
+    })
+   
+   }
+ componentDidMount( ){
+    this.getData(this.props.listData.idData);
+    this.state.heightContainer = 60 + this.state.dataSource.length*30;
+ }
+    render(){
+        var dd = this.props.listData.ngayMua.slice(0,2);
+        var mm = this.props.listData.ngayMua.slice(3,5);
+        var yyyy = this.props.listData.ngayMua.slice(6,10);
+        var day_of_week = get_day(dd, mm, yyyy);
+       var tongTien = 0;
+       this.state.dataSource.map((data)=>{
         tongTien += data.giaTien;
     });
-  
-    return  <View style = {{height: heightContainer, 
-        display: 'flex', flexDirection: 'row', 
-        backgroundColor:'white',
-        borderRadius: 20,
-        padding: 5,
-        flex: 10
-        }}>
-                  {/* ngày tháng */}
-                <View style = {{height: heightContainer, justifyContent:'space-around', flex: 1}}>
-                  <View style = {styles.date}>
-                      <View style = {{width: 60, height: 30, alignItems:'center', flexDirection:'row', justifyContent:'center'}}>
-                       {
-                          day_of_week == 'CN' ? <Text/> :<Text style= {{fontSize: 12, fontFamily: 'Segoe UI'}}> Thứ </Text>
-                       } 
-                     
-                          <Text style= {{fontSize: 24, fontFamily: 'Segoe UI', fontWeight: 'bold'}}>{day_of_week}</Text>
-                      </View>
-                      <Text style= {{fontSize: 12, fontFamily: 'Segoe UI'}}>{dd}/{mm}</Text>
-                      <Text style= {{fontSize: 12, fontFamily: 'Segoe UI', paddingBottom: 3}}>{yyyy}</Text>
-                  </View>
-                </View>
-                
-                <View style = {{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 9}}>
-       
-                    {/* Tiêu đề */}
-                  <View style = {{display: 'flex', flexDirection: 'row', flex: 1, paddingBottom: 10}}>
-                      <View style ={{width: 90, alignItems: 'center' ,flex: 1}}>
-                          <Text style = {{fontSize: 14, fontFamily: 'Segoe UI', fontWeight: 'bold',}} >Loại</Text>
-                      </View>
-                      <View style ={{width: 90,alignItems: 'center', flex: 1}}>
-                          <Text style = {{fontSize: 14, fontFamily: 'Segoe UI', fontWeight: 'bold',}}>Nội dung</Text>
-                      </View>
-                      <View style ={{width: 90, alignItems: 'center', flex: 1}}>
-                          <Text style = {{fontSize: 14, fontFamily: 'Segoe UI', fontWeight: 'bold',}}>Giá tiền</Text>
-                      </View>
-                  </View>
-                  
-                  {/* list Thông tin */}
-                  <View style = {{flex: 8}}>
-                  <View style = {{justifyContent: 'space-between', flex: 7}}>
-                      {listKhoanChi.map(data =>(
-                          <ItemKhoanChi key = {data.id} data = {data}/>
-                      ))}
-                     
-                  </View>
-                      <View style = {{flexDirection:'row', flex:1, paddingBottom: 10}}>
-                          <View style = {{paddingLeft:20, paddingRight: 20}}>
-                              <Text style = {{fontSize: 14, fontFamily: 'Segoe UI', fontWeight: 'bold',color: 'red'}}>TỔNG CHI: {tongTien} vnđ</Text>
-                          </View>
-                          <TouchableOpacity>
-                              <Text style = {{fontSize: 14, fontFamily: 'Segoe UI', fontWeight: 'bold', color: '#054FFC', textDecorationLine:'underline'}}>Xem chi tiết</Text>
-                          </TouchableOpacity>
-                      
-                      </View>
-                  </View>
-                
-                </View>
-               
+
+        return(
+            <View>
+                {
+                    this.state.dataSource.length>0?<View style = {{height: this.state.heightContainer, 
+                        display: 'flex', flexDirection: 'row', 
+                        backgroundColor:'white',
+                        borderRadius: 20,
+                        padding: 5,
+                        flex: 10
+                        }}>
+                                  {/* ngày tháng */}
+                                <View style = {{height: this.state.heightContainer, justifyContent:'space-around', flex: 1}}>
+                                  <View style = {styles.date}>
+                                      <View style = {{width: 60, height: 30, alignItems:'center', flexDirection:'row', justifyContent:'center'}}>
+                                       {
+                                          day_of_week == 'CN' ? <Text/> :<Text style= {{fontSize: 12, fontFamily: 'Segoe UI'}}> Thứ </Text>
+                                       } 
+                                     
+                                          <Text style= {{fontSize: 24, fontFamily: 'Segoe UI', fontWeight: 'bold'}}>{day_of_week}</Text>
+                                      </View>
+                                      <Text style= {{fontSize: 12, fontFamily: 'Segoe UI'}}>{dd}/{mm}</Text>
+                                      <Text style= {{fontSize: 12, fontFamily: 'Segoe UI', paddingBottom: 3}}>{yyyy}</Text>
+                                  </View>
+                                </View>
+                                
+                                <View style = {{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 9}}>
+                       
+                                    {/* Tiêu đề */}
+                                  <View style = {{display: 'flex', flexDirection: 'row', flex: 1, paddingBottom: 10}}>
+                                      <View style ={{width: 90, alignItems: 'center' ,flex: 1}}>
+                                          <Text style = {{fontSize: 14, fontFamily: 'Segoe UI', fontWeight: 'bold',}} >Loại</Text>
+                                      </View>
+                                      <View style ={{width: 90,alignItems: 'center', flex: 1}}>
+                                          <Text style = {{fontSize: 14, fontFamily: 'Segoe UI', fontWeight: 'bold',}}>Nội dung</Text>
+                                      </View>
+                                      <View style ={{width: 90, alignItems: 'center', flex: 1}}>
+                                          <Text style = {{fontSize: 14, fontFamily: 'Segoe UI', fontWeight: 'bold',}}>Giá tiền</Text>
+                                      </View>
+                                  </View>
+                                  
+                                  {/* list Thông tin */}
+                                  <View style = {{flex: 8}}>
+                                  <View style = {{justifyContent: 'space-between', flex: 7}}>
+                                      {this.state.dataSource.map(data =>(
+                                          <ItemKhoanChi key = {data.id} data = {data}/>
+                                      ))}
+                                     
+                                  </View>
+                                      <View style = {{flexDirection:'row', flex:1, paddingBottom: 10}}>
+                                          <View style = {{paddingLeft:30, paddingRight: 20}}>
+                                              <Text style = {{fontSize: 14, fontFamily: 'Segoe UI', fontWeight: 'bold',color: 'red'}}>TỔNG CHI: {tongTien} vnđ</Text>
+                                          </View>
+                                          <TouchableOpacity>
+                                              <Text style = {{fontSize: 14, fontFamily: 'Segoe UI', fontWeight: 'bold', color: '#054FFC', textDecorationLine:'underline'}}>Xem chi tiết</Text>
+                                          </TouchableOpacity>
+                                      
+                                      </View>
+                                  </View>
+                                
+                                </View>
+                               
+                            </View>
+                    :<View/>
+                }
             </View>
-  
-}
-
-
+              ) 
+    }
+};
 const styles = StyleSheet.create({
-    item:{
-        height: heightContainer,
-        display: 'flex',
-        flexDirection: 'row',
-        backgroundColor:'white',
-        borderRadius: 20,
-        padding: 5
-    },
     date:{
         width: 60,
         height:60,

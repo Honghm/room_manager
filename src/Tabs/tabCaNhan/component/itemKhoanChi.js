@@ -9,11 +9,9 @@ import {
 
 export default function ItemKhoanChi(props){
    var {data} = props;
-    var iconImage;
-    iconImage = get_icon(data.iconLoai);
     return  <View style = {styles.container}>
         <View style = {{flexDirection:'row', flex: 1}}>
-            <Image style = {styles.image} source= {iconImage}></Image>
+            <Image style = {styles.image} source= {{uri: data.iconLoai}}></Image>
         <Text style = {styles.text}>{data.tenLoai}</Text>
         </View>
         <View style = {{flex: 1}}>
@@ -48,19 +46,3 @@ const styles = StyleSheet.create({
     }
 }
 );
-
-function get_icon(params) {
-    switch (params) {
-        case '1':
-           return require('../../../../assets/image/icon-an-uong.png');
-        case '2':
-            return require('../../../../assets/image/icon-mua-sam.png');
-        case '3':
-            return require('../../../../assets/image/icon-suc-khoe.png');
-        case '4':
-            return require('../../../../assets/image/icon-khac.png');
-        case '5':
-            return require('../../../../assets/image/delivery-man.png');
-    }
-
-}

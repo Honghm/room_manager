@@ -1,25 +1,20 @@
 import React from 'react';
-import { Button, View, Text, Image, StyleSheet, TouchableOpacity,Animated } from 'react-native';
+import { View, Text,TouchableOpacity } from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
-import { useNavigation, useRoute, DrawerActions } from '@react-navigation/native';
+import {DrawerActions } from '@react-navigation/native';
 import TabCaNhan from '../Tabs/tabCaNhan/tabCaNhan'
 import TabNhom from '../Tabs/tabNhom/tabNhom'
 
-import Tab3 from '../Tabs/tab3'
 import {styles} from '../styles/styles'
 import BottomTabBar from '../component/bottom_tab_bar'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const BottomTab = createBottomTabNavigator();
-let title;
-function TabDemo(params) {
-  return<View style = {{flex: 1, }}></View>
-} 
+
 
 export default class MainPage extends React.Component {
-
  
   render(){
     console.log(this.props);
@@ -62,25 +57,3 @@ export default class MainPage extends React.Component {
   }
 };
 
-// const styles = StyleSheet.create({
-//     app_bar: {
-//         flexDirection: 'row',
-//         height: 35,
-//         alignItems: 'center',
-//         padding: 5,
-//         shadowOpacity: 0.3,
-//         shadowRadius: 10,
-//         shadowOffset: {width: 0, height: 0}
-//     },
-//     text_app_bar:{
-//         fontFamily: 'Segoe UI',
-//         fontSize: 18,
-//         fontWeight: 'bold',
-//         paddingLeft: 30,
-//         color: 'white'
-//     },
-//     image_app_bar:{
-//         width: 25,
-//         height: 35,
-//     },
-// })

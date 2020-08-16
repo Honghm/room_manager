@@ -30,7 +30,7 @@ export default class LoginPage extends React.Component {
                                 borderColor: 'black',
                                 borderWidth: 1
                             }}
-                            onPress = {()=>this.props.navigation.navigate('Drawer', {name: "aaa"})}
+                            onPress = {()=>this.props.navigation.navigate('Drawer')}
                             >
                             <Image style = {{width: 43, height: 43}} source = {require('../../assets/image/icon-facebook.png')}/>
                             <Text style = {styles.title_button}>Đăng nhập bằng Facebook</Text>
