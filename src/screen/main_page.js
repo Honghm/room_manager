@@ -7,7 +7,6 @@ import {DrawerActions } from '@react-navigation/native';
 import TabCaNhan from '../Tabs/tabCaNhan/tabCaNhan'
 import TabNhom from '../Tabs/tabNhom/tabNhom'
 
-import {styles} from '../styles/styles'
 import BottomTabBar from '../component/bottom_tab_bar'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -15,16 +14,15 @@ const BottomTab = createBottomTabNavigator();
 
 
 export default class MainPage extends React.Component {
- 
   render(){
-    console.log(this.props);
+    //console.log(this.props);
     return(
       <LinearGradient 
           colors ={['#42AF3B','#17B6A0']} 
           style = {{flex: 5,}}
           start={{x: 2.0, y: 0.25}} end={{x: 1, y: 1.0}}>
           <View style = {{flex: 1}}>
-            <View style = {styles.app_bar}>
+            <View style = {{height: 50, flexDirection:'row'}}>
               <View paddingLeft = {5}>
               {createDrawer}
                   <TouchableOpacity onPress={() => this.props.navigation.dispatch(DrawerActions.toggleDrawer())}>
@@ -35,7 +33,7 @@ export default class MainPage extends React.Component {
                       />
                   </TouchableOpacity>
               </View>
-              <Text style = {styles.text_app_bar}>{this.props.route.state == null ?
+              <Text style = {{}}>{this.props.route.state == null ?
              "QUẢN LÝ CHI TIÊU CÁ NHÂN"
              :((this.props.route.state.index != 0 ?
              "QUẢN LÝ CHI TIÊU NHÓM":"QUẢN LÝ CHI TIÊU CÁ NHÂN"))}</Text>

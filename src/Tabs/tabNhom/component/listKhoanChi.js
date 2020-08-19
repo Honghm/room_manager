@@ -9,6 +9,7 @@ import {
 import {firebaseApp} from '../../../component/FirebaseConfig'
 import ItemKhoanChi from './itemKhoanChi'
 import {defines} from '../../../defines'
+import { ScrollView } from 'react-native-gesture-handler'
 
 
 
@@ -26,23 +27,29 @@ export default class ListKhoanChi extends Component {
    
   }
    getData(idData){
-   
-    
-    this.itemRef.ref('KhoanChi').child(idData).child('data').on('child_added', (dataSnapshot)=>{
+    this.itemRef.ref('Groups/PenHouse/KhoanChi').child(idData).child('data').on('child_added', (dataSnapshot)=>{
         var item = [];
+        var ten  = this.getTenNguoiLap(dataSnapshot.child('nguoiLap').val())
         item.push({
             id: dataSnapshot.key,
             iconLoai: dataSnapshot.child('iconLoai').val(),
             tenLoai: dataSnapshot.child('tenLoai').val(),
             noiDung: dataSnapshot.child('noiDung').val(),
             giaTien: dataSnapshot.child('giaTien').val(),
+            nguoiLap: ten
         })
        this.setState(
         this.state.dataSource  = this.state.dataSource.concat(item)
     )
     })
-   
    }
+   getTenNguoiLap(idName){
+       var ten;
+    this.itemRef.ref('Users').child(idName).on('value', (dataSnapshot)=>{
+        ten = dataSnapshot.child('ten').val()
+    })
+    return ten;
+   } 
  componentDidMount( ){
     this.getData(this.props.listData.idData);
     this.state.heightContainer = 60 + this.state.dataSource.length*30;
@@ -85,29 +92,32 @@ export default class ListKhoanChi extends Component {
                                 <View style = {{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 9}}>
                        
                                     {/* Tiêu đề */}
-                                  <View style = {{display: 'flex', flexDirection: 'row', flex: 1, paddingBottom: 10, marginLeft: 20}}>
-                                      <View style ={styles.viewTieuDe}>
+                                  <View style = {{display: 'flex', flexDirection: 'row', flex: 1, paddingBottom: 10, marginLeft: 30}}>
+                                      <View style ={{ width: 90, alignItems: 'center' ,flex: 1}}>
                                           <Text style = {styles.textTieuDe} >Loại</Text>
                                       </View>
-                                      <View style ={styles.viewTieuDe}>
-                                          <Text style = {styles.textTieuDe}>Nội dung</Text>
+                                      <View style ={{ width: 90, alignItems: 'center' ,flex: 1.6}}>
+                                          <Text style = {styles.textTieuDe}>N.Dung</Text>
                                       </View>
-                                      <View style ={styles.viewTieuDe}>
-                                          <Text style = {styles.textTieuDe}>Giá tiền</Text>
+                                      <View style ={{ width: 90, alignItems: 'center' ,flex: 0.8}}>
+                                          <Text style = {styles.textTieuDe}>G.Tiền</Text>
+                                      </View>
+                                      <View style ={{ width: 90, alignItems: 'center' ,flex: 0.8}}>
+                                          <Text style = {styles.textTieuDe}>N.Lập</Text>
                                       </View>
                                   </View>
                                   
                                   {/* list Thông tin */}
                                   <View style = {{flex: 8}}>
-                                  <View style = {{justifyContent: 'space-between', flex: 7}}>
+                                  <View style = {{justifyContent: 'space-between', flex: 7, paddingLeft: 5}}>
                                       {this.state.dataSource.map(data =>(
                                           <ItemKhoanChi key = {data.id} data = {data}/>
                                       ))}
                                      
                                   </View>
-                                      <View style = {{flexDirection:'row', flex:1, paddingBottom: 10 ,alignItems: 'center'}}>
+                                      <View style = {{flexDirection:'row', flex:1, paddingBottom: 10 ,alignItems: 'center', justifyContent: 'space-between', paddingLeft: 20, paddingRight: 20}}>
                                           <View style = {{paddingLeft:30, paddingRight: 20}}>
-                                              <Text style = {{fontSize: defines.sizeText + 2, fontFamily: defines.font, fontWeight: 'bold',color: 'red'}}>TỔNG CHI: {tongTien} vnđ</Text>
+                                              <Text style = {{fontSize: defines.sizeText + 2, fontFamily: defines.font, fontWeight: 'bold',color: 'red'}}>TỔNG CHI: {tongTien}K</Text>
                                           </View>
                                           <TouchableOpacity>
                                               <Text style = {{fontSize: defines.sizeText, fontFamily: defines.font, fontWeight: 'bold', color: '#054FFC', textDecorationLine:'underline'}}>Xem chi tiết</Text>
@@ -142,9 +152,6 @@ const styles = StyleSheet.create({
      fontFamily: defines.font, 
      fontWeight: 'bold',
    },
-   viewTieuDe:{
-    width: 90, alignItems: 'center' ,flex: 1
-   }
 });
 
 function get_day(dd, mm, yyyy) {

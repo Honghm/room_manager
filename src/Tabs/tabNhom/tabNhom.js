@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, StyleSheet, } from 'react-native';
 
-import KhoanThu from './layouts/khoanThu'
+import TongQuan from './layouts/tongQuan'
 import KhoanChi from './layouts/khoanChi'
 import ThongKe from './layouts/thongKe'
 
@@ -15,8 +15,8 @@ export default class TabNhom extends React.Component {
         return(
             <View style= {{flex: 1, }}>
             <TopTab.Navigator tabBar={props => <TopTabBar {...props}/>} initialRouteName = "tabKhoanChi">
-                <TopTab.Screen name = "tabKhoanThu" component = {KhoanThu} options = {{title: 'Khoản thu'}}/>
-                <TopTab.Screen name = "tabKhoanChi" component = {KhoanChi} options = {{title: 'Khoản Chi'}}/>
+                <TopTab.Screen name = "tabTongQuan" component = {TongQuan} options = {{title: 'Tổng quan'}}/>
+                <TopTab.Screen name = "tabKhoanChi" component = {KhoanChi} options = {{title: 'Khoản chi'}}/>
                 <TopTab.Screen name = "tabThongKe" component = {ThongKe} options = {{title: 'Thống kê'}}/>
             </TopTab.Navigator>
             </View>
