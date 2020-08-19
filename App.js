@@ -56,9 +56,10 @@ export default class App extends React.Component {
       
     </Stack.Navigator>
 
-    createDrawer = () =>{
+    createDrawer = (props) =>{
+      console.log(props);
       return   <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent  {...props} />} initialRouteName = 'MainPage'>
-      <Drawer.Screen name = "MainPage" component = {MainPage} options = {{title: 'Trang chủ'}}/>
+      <Drawer.Screen name = "MainPage" component = {MainPage} options = {{title: 'Trang chủ'}} />
     </Drawer.Navigator>
     }
   
