@@ -19,7 +19,7 @@ function TopTabBar({ state, descriptors, navigation, position }) {
           });
 
           if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
+            navigation.navigate(route.name, {email: route.params.email});
           }
         };
 

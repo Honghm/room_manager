@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
@@ -9,7 +9,6 @@ function BottomTabBar({ state, descriptors, navigation }) {
   if (focusedOptions.tabBarVisible === false) {
     return null;
   }
-
   return (
     <View style={{ flexDirection: 'row', height:40, justifyContent:'center', alignItems: 'center' }}>
       {state.routes.map((route, index) => {
@@ -31,7 +30,7 @@ function BottomTabBar({ state, descriptors, navigation }) {
           });
 
           if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
+            navigation.navigate(route.name, {email: route.params.email});
           }
         };
         return (

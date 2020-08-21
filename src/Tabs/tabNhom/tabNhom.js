@@ -15,9 +15,9 @@ export default class TabNhom extends React.Component {
         return(
             <View style= {{flex: 1, }}>
             <TopTab.Navigator tabBar={props => <TopTabBar {...props}/>} initialRouteName = "tabKhoanChi">
-                <TopTab.Screen name = "tabTongQuan" component = {TongQuan} options = {{title: 'Tổng quan'}}/>
-                <TopTab.Screen name = "tabKhoanChi" component = {KhoanChi} options = {{title: 'Khoản chi'}}/>
-                <TopTab.Screen name = "tabThongKe" component = {ThongKe} options = {{title: 'Thống kê'}}/>
+                <TopTab.Screen name = "tabTongQuan" component = {TongQuan} options = {{title: 'Tổng quan'}} initialParams = {{email: this.props.route.params.email}}/>
+                <TopTab.Screen name = "tabKhoanChi" component = {KhoanChi} options = {{title: 'Khoản chi'}} initialParams = {{email: this.props.route.params.email}}/>
+                <TopTab.Screen name = "tabThongKe" component = {ThongKe} options = {{title: 'Thống kê'}} initialParams = {{email: this.props.route.params.email}}/>
             </TopTab.Navigator>
             </View>
         )

@@ -9,11 +9,7 @@ import {
 import {firebaseApp} from '../../../component/FirebaseConfig'
 import ItemKhoanChi from './itemKhoanChi'
 import {defines} from '../../../defines'
-import { ScrollView } from 'react-native-gesture-handler'
 
-
-
-const itemRef = firebaseApp.database(); 
 
 export default class ListKhoanChi extends Component {
   constructor(props){
