@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity,StyleSheet,ScrollView, TextInput, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity,StyleSheet,ScrollView, TextInput, Alert, Button } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {firebaseApp} from '../component/FirebaseConfig'
 export default class LoginPage extends React.Component {
@@ -7,12 +7,16 @@ export default class LoginPage extends React.Component {
         super(props);
        this.state = {
         taiKhoan:'nhập email',
-        matKhau:'nhập mật khẩu'
+        matKhau:'nhập mật khẩu',
+        idUser:''
        }
+      
     }
     dangNhap(taikhoan, matkhau){
         firebaseApp.auth().signInWithEmailAndPassword(taikhoan, matkhau).then(
-            ()=>this.props.navigation.navigate('Drawer', {taikhoan: 'minhhong'})
+           
+            (props)=>{
+                this.props.navigation.navigate('MainPage', {taikhoan: props.user.email})}
         ).catch(function(error){
             Alert.alert(
                 'Thông báo',
@@ -20,6 +24,7 @@ export default class LoginPage extends React.Component {
             )
         })
     }
+  
     render(){
         return(
             <LinearGradient 

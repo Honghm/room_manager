@@ -10,9 +10,6 @@ import {defines} from '../../../defines'
 export default function ItemKhoanChi(props){
    var {data} = props;
     return  <View style = {styles.container}>
-        {/* <View style = {{flex: 1,alignItems: 'center'}}>
-            <Image style = {styles.image} source= {{uri: data.iconLoai}}></Image>
-        </View> */}
           <View style = {{flexDirection:'row', flex: 1, paddingLeft: 3}}>
             <Image style = {styles.image} source= {{uri: data.iconLoai}}></Image>
         <Text style = {styles.text}>{data.tenLoai}</Text>
