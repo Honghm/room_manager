@@ -71,15 +71,15 @@ export default class MainPage extends React.Component {
         fontWeight: 'bold',
         paddingLeft: 30,
         color: 'white'}}>{this.props.route.state == null ?
-             "QUẢN LÝ CHI TIÊU CÁ NHÂN"
+             "QUẢN LÝ CHI TIÊU NHÓM"
              :((this.props.route.state.index != 0 ?
-             "QUẢN LÝ CHI TIÊU NHÓM":"QUẢN LÝ CHI TIÊU CÁ NHÂN"))}</Text>
+             "QUẢN LÝ CHI TIÊU NHÓM":"QUẢN LÝ CHI TIÊU NHÓM"))}</Text>
             </View>
          
             <View style = {{flex: 4 }}>
            <View style = {{flex: 1}}>
            <BottomTab.Navigator tabBar = {props =><BottomTabBar {...props}/>}>
-                  <BottomTab.Screen name = "tabCaNhan" component = {TabCaNhan} initialParams = {{email: this.state.email}}/>
+                  {/* <BottomTab.Screen name = "tabCaNhan" component = {TabCaNhan} initialParams = {{email: this.state.email}}/> */}
                   <BottomTab.Screen name = "tabNhom" component = {TabNhom} initialParams = {{email: this.state.email}}/>
               </BottomTab.Navigator>
            </View>

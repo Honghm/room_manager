@@ -79,15 +79,20 @@ export default class KhoanChi extends Component {
                 soDu:soDu - tinhTien
             })
         })
-        const linkData = this.itemRef.ref('Groups/PenHouse/KhoanChi').child(this.state.ngayMua);
-        var numData;
-        linkData.child('data').once('value', (dataSnapshot)=>{
-            numData = dataSnapshot.numChildren()
+      
+        var numData = 0;
+        var idData = '';
+        this.itemRef.ref('Groups/PenHouse').child('KhoanChi').on('child_added', (dataSnapshot)=>{
+           if(dataSnapshot.child('ngayMua').val()==this.state.ngayMua){
+               numData++;
+               idData = dataSnapshot.key
+           }
         })
-        //kiểm tra xem ngày tạo khoản chi đã tồn tại hay chưa
+       
+        // kiểm tra xem ngày tạo khoản chi đã tồn tại hay chưa
         if(numData > 0){
             //ngày tạo đã tồn tại -> thêm dữ liệu vào ngày đã tạo
-            linkData.child('data').push({
+            this.itemRef.ref('Groups/PenHouse/KhoanChi').child(idData).child('data').push({
                 iconLoai: this.state.iconLoai,
                 tenLoai: this.state.tenLoai,
                 noiDung: this.state.noiDung,
@@ -110,7 +115,7 @@ export default class KhoanChi extends Component {
             )
         }else{
             //ngày chưa tồn tại -> tạo ngày mới + thêm dữ liệu vào
-            linkData.set({
+            this.itemRef.ref('Groups/PenHouse/KhoanChi').push({
                 data: [{
                     iconLoai: this.state.iconLoai,
                     tenLoai: this.state.tenLoai,
@@ -123,9 +128,9 @@ export default class KhoanChi extends Component {
                 ngayMua: this.state.ngayMua
             }).then(
                 this.setState({
-              loai: 0,
-              iconLoai: "",
-              tenLoai: "",
+                loai: 0,
+                iconLoai: "",
+                tenLoai: "",
                 noiDung: "",
                 giaTien: 0,
                 ngayMua: "",
@@ -135,8 +140,6 @@ export default class KhoanChi extends Component {
                 })
             )
         }
-        
-    
     }
 
 
