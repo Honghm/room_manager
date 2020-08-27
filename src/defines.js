@@ -1,4 +1,4 @@
 export const defines = {
-    font: 'Arial',
+    font: 'arial',
     sizeText: 12 
 }

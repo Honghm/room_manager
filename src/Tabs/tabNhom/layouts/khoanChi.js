@@ -170,7 +170,7 @@ export default class KhoanChi extends Component {
     this.itemRef.ref('Groups/PenHouse/ThanhVien').on('child_added',(dataSnapshot)=>{
         var dataUserInGroup = [];
        
-      this.itemRef.ref('Users/'+dataSnapshot.val()).once('value', (data)=>{
+      this.itemRef.ref('Users/'+dataSnapshot.val()).on('value', (data)=>{
         dataUserInGroup.push({
             label: data.child('ten').val(),
             value: data.key,
@@ -193,7 +193,6 @@ export default class KhoanChi extends Component {
     this.itemRef.ref('Groups/PenHouse/KhoanChi').on('child_added', (dataSnapshot)=>{
         var dataKhoanChi = [];
         dataKhoanChi.push({
-            id: dataSnapshot.child('id').val(),
             ngayMua:dataSnapshot.child('ngayMua').val(),
             idData: dataSnapshot.key
         })
@@ -220,7 +219,7 @@ export default class KhoanChi extends Component {
                renderItem = {({item}) => <View style = {{paddingBottom: 10}}>
                    <ListKhoanChi listData = {item}/>
                    </View>}
-               keyExtractor = {item =>item.id}
+               keyExtractor = {item =>item.idData}
                contentContainerStyle = {{padding: 10}}
                />          
             </View>
@@ -234,7 +233,8 @@ export default class KhoanChi extends Component {
                     friction = {0.9}
                     containerStyle = {{width: width - 20, marginLeft: 10,}}
                     >
-                    <View style = {{flex: 1, height: 50, borderRadius: 24, alignItems: 'center'}}>
+                 <View style = {{flex: 1}}>
+                 <View style = {{flex: 1, height: 50, borderRadius: 24, alignItems: 'center'}}>
                         <TouchableOpacity
                         onPress = {()=> {this._panel.show()}}
                         >
@@ -248,7 +248,7 @@ export default class KhoanChi extends Component {
                         </TouchableOpacity>
                     </View>
                     
-                    <View style = {{height: height - 180, backgroundColor: 'white', borderRadius: 24, justifyContent: 'center', alignItems: 'center', flexDirection:'column-reverse'}}>
+                    <View style = {{flex:9, height: height - 180, backgroundColor: 'white', borderRadius: 24, justifyContent: 'center', alignItems: 'center', flexDirection:'column-reverse'}}>
                         
                         {/* Buttom điều hướng */}
                         <View style = {styles.viewThongTin}>
@@ -328,7 +328,7 @@ export default class KhoanChi extends Component {
                                                 giaTien: gia.nativeEvent.text
                                             })}
                                             keyboardType={'numeric'}
-                                            value = {this.state.giaTien}  
+                                            value = {this.state.giaTien.toString()}  
                                         />
                                     </View>
                                     <Text style = {styles.title}>vnđ</Text>
@@ -430,7 +430,7 @@ export default class KhoanChi extends Component {
                                 
                         </ScrollView>
                         {/* tiêu đề */}
-                        <View style = {{paddingTop: 10}}>
+                        <View style = {{paddingTop: 10,  flex: 0.1}}>
                             <Text style = {{
                                 fontSize: 20,
                                 fontWeight: 'bold',
@@ -453,6 +453,7 @@ export default class KhoanChi extends Component {
                         )}
                     </View>
         
+                 </View>
                 </SlidingUpPanel>
                 
             </View>

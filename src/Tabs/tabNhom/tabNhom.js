@@ -3,7 +3,6 @@ import { View, StyleSheet, } from 'react-native';
 
 import TongQuan from './layouts/tongQuan'
 import KhoanChi from './layouts/khoanChi'
-import ThongKe from './layouts/thongKe'
 
 import TopTabBar from '../../component/top_tab_bar'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';

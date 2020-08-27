@@ -34,7 +34,7 @@ function BottomTabBar({ state, descriptors, navigation }) {
           }
         };
         return (
-         <View style = {{flex: 1, height: 40}}>
+         <View key = {route.name} style = {{flex: 1, height: 40}}>
              {
                  (route.name =="tabCaNhan")? (<View style = {stytes.tabIcon}>
                      <TouchableOpacity onPress = {onPress}>

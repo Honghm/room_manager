@@ -37,7 +37,7 @@ function TopTabBar({ state, descriptors, navigation, position }) {
         });
 
         return (
-            <View style = {{height: 40, flex: 1, paddingLeft: 10, paddingRight: 10,justifyContent:'space-between', alignItems: 'center'}}>
+            <View key = {route.name} style = {{height: 40, flex: 1, paddingLeft: 10, paddingRight: 10,justifyContent:'space-between', alignItems: 'center'}}>
                     <TouchableOpacity
                     accessibilityRole="button"
                     accessibilityStates={isFocused ? ['selected'] : []}

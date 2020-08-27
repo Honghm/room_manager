@@ -46,7 +46,7 @@ export default class ListKhoanChi extends Component {
     })
     return ten;
    } 
- componentDidMount( ){
+ componentDidMount(){
     this.getData(this.props.listData.idData);
     this.state.heightContainer = 60 + this.state.dataSource.length*30;
  }
@@ -113,7 +113,11 @@ export default class ListKhoanChi extends Component {
                                   </View>
                                       <View style = {{flexDirection:'row', flex:1, paddingBottom: 10 ,alignItems: 'center', justifyContent: 'space-between', paddingLeft: 20, paddingRight: 20}}>
                                           <View style = {{paddingLeft:30, paddingRight: 20}}>
-                                              <Text style = {{fontSize: defines.sizeText + 2, fontFamily: defines.font, fontWeight: 'bold',color: 'red'}}>TỔNG CHI: {tongTien}K</Text>
+                                              {
+                                                   tongTien>=1000 ?  <Text style = {{fontSize: defines.sizeText + 2, fontFamily: defines.font, fontWeight: 'bold',color: 'red'}}>TỔNG CHI: {tongTien/1000}TR</Text>
+                                                   :<Text style = {{fontSize: defines.sizeText + 2, fontFamily: defines.font, fontWeight: 'bold',color: 'red'}}>TỔNG CHI: {tongTien}K</Text>
+                                              }
+                                              
                                           </View>
                                           <TouchableOpacity>
                                               <Text style = {{fontSize: defines.sizeText, fontFamily: defines.font, fontWeight: 'bold', color: '#054FFC', textDecorationLine:'underline'}}>Xem chi tiết</Text>

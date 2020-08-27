@@ -28,7 +28,7 @@ export default class KhoanChi extends Component {
            trang: 0, 
            loai: 0,
            show: false, 
-           date: new Date(1598051730000),
+           date: new Date(),
            tenLoai:"",
            iconLoai: "",
            noiDung: "",
@@ -163,7 +163,8 @@ export default class KhoanChi extends Component {
                        friction = {0.9}
                        containerStyle = {{width: width - 20, marginLeft: 10,}}
                        >
-                           <View style = {{flex: 1, height: 50, borderRadius: 24, alignItems: 'center'}}>
+                         <View style = {{flex: 1}}>
+                         <View style = {{flex: 1, height: 50, borderRadius: 24, alignItems: 'center'}}>
                                <TouchableOpacity
                                onPress = {()=> {this._panel.show()}}
                                >
@@ -338,6 +339,7 @@ export default class KhoanChi extends Component {
                             )}
                            </View>
             
+                         </View>
                    </SlidingUpPanel>
             </View>
         )

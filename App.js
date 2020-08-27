@@ -6,7 +6,9 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import MainPage from './src/screen/main_page';
 import LoginPage from './src/screen/login_page'
-// import CustomDrawerContent from './src/drawer/drawer_content'
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Remote debugger'])
+LogBox.ignoreLogs(['Setting a timer'])
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -42,6 +44,7 @@ export default class App extends React.Component {
             },
         })}
        />
+     
       <Stack.Screen name = "Drawer" children = {createDrawer}  options={() => ({
          header: ({ scene, navigation }) => {
           const { options } = scene.descriptor;
