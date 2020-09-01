@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import { KeyboardAwareScrollView } from '@codler/react-native-keyboard-aware-scroll-view'
 
 function BottomTabBar({ state, descriptors, navigation }) {
   const focusedOptions = descriptors[state.routes[state.index].key].options;
@@ -10,6 +10,7 @@ function BottomTabBar({ state, descriptors, navigation }) {
     return null;
   }
   return (
+   
     <View style={{ flexDirection: 'row', height:40, justifyContent:'center', alignItems: 'center' }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];

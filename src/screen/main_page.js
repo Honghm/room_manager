@@ -8,6 +8,8 @@ import BottomTabBar from '../component/bottom_tab_bar'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MenuDrawer from 'react-native-side-drawer'
 import AsyncStorage from '@react-native-community/async-storage';
+import * as Animatable from 'react-native-animatable';
+import { KeyboardAwareScrollView } from '@codler/react-native-keyboard-aware-scroll-view'
 import {
   Avatar,
   Title,
@@ -44,7 +46,7 @@ export default class MainPage extends React.Component {
                                 size={50}
                             />
                             <View style={{marginLeft:15, flexDirection:'column'}}>
-                                <Title style={styles.title}>Minh Hồng</Title>
+                                <Title style={styles.title}>PenHouse City</Title>
                               <Caption style={styles.caption}>{this.state.email}</Caption>
                             </View>
                             <TouchableOpacity
@@ -134,6 +136,7 @@ export default class MainPage extends React.Component {
     await AsyncStorage.setItem('@TK:tk', '')
     await AsyncStorage.setItem('@MK:mk', '')
     props.navigation.navigate('LoginPage');
+    this.setState({ open: !this.state.open });
   } catch (e) {
       console.log(e);
     // saving error
@@ -183,10 +186,8 @@ export default class MainPage extends React.Component {
          
             <View style = {{flex: 4 }}>
            <View style = {{flex: 1}}>
-           <BottomTab.Navigator tabBar = {props =><BottomTabBar {...props}/>}>
-                  {/* <BottomTab.Screen name = "tabCaNhan" component = {TabCaNhan} initialParams = {{email: this.state.email}}/> */}
-                  <BottomTab.Screen name = "tabNhom" component = {TabNhom} initialParams = {{email: this.state.email}}/>
-              </BottomTab.Navigator>
+            <TabNhom taikhoan = {this.state.email}/>
+       
            </View>
             </View>
           

@@ -8,7 +8,9 @@ import { View,
      Text,
      TextInput,
     Image,
-    ScrollView
+    ScrollView,
+    Alert,RefreshControl,
+    KeyboardAvoidingView
      } from 'react-native';
 import ListKhoanChi from '../component/listKhoanChi'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -17,8 +19,8 @@ import {firebaseApp} from '../../../component/FirebaseConfig'
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {defines} from '../../../defines'
-
-const {width, height} = Dimensions.get('window')
+import { KeyboardAwareScrollView } from '@codler/react-native-keyboard-aware-scroll-view'
+const {width, height} = Dimensions.get('screen')
 
 export default class KhoanChi extends Component {
     
@@ -35,13 +37,14 @@ export default class KhoanChi extends Component {
            tenLoai:"",
            iconLoai: "",
            noiDung: "",
-           giaTien: 0,
+           giaTien: "",
            ngayMua: "",
            hoaDon: "",
            ghiChu:"",
            nguoiLap: "",
            nguoiThamGia: [],
-           dataNguoiTrongNhom:[]
+           dataNguoiTrongNhom:[],
+           refreshing: false
        }
    }
 
@@ -54,6 +57,7 @@ export default class KhoanChi extends Component {
     if(ngay<10){ngay = '0' + ngay}
     if(thang<10){thang = '0' + thang}
    Platform.OS === 'ios';
+   console.log(event);
    this.setState({
        date: this.state.date = currentDate,
        show: false,
@@ -69,7 +73,7 @@ export default class KhoanChi extends Component {
                 idUser = dataSnapshot.key
             }
         })
-        var tinhTien = this.state.giaTien/(this.state.nguoiThamGia.length)
+        var tinhTien = Math.ceil(this.state.giaTien/(this.state.nguoiThamGia.length))
         this.state.nguoiThamGia.map((user)=>{
             var soDu;
             this.itemRef.ref('Users').child(user).on('value' ,(data)=>{
@@ -111,6 +115,7 @@ export default class KhoanChi extends Component {
                 hoaDon: "",
                 ghiChu:"",
                 nguoiThamGia: []
+
                 })
             )
         }else{
@@ -120,7 +125,7 @@ export default class KhoanChi extends Component {
                     iconLoai: this.state.iconLoai,
                     tenLoai: this.state.tenLoai,
                     noiDung: this.state.noiDung,
-                    giaTien: Math.round(this.state.giaTien),
+                    giaTien: Math.round(this.state.giaTien/1000),
                     ghiChu: this.state.ghiChu,
                     nguoiLap: idUser,
                     nguoiThamGia:this.state.nguoiThamGia
@@ -169,16 +174,15 @@ export default class KhoanChi extends Component {
     //lấy danh sách các thành viên trong nhóm
     this.itemRef.ref('Groups/PenHouse/ThanhVien').on('child_added',(dataSnapshot)=>{
         var dataUserInGroup = [];
-       
       this.itemRef.ref('Users/'+dataSnapshot.val()).on('value', (data)=>{
         dataUserInGroup.push({
             label: data.child('ten').val(),
             value: data.key,
         })
-      });
         this.setState(
             this.state.dataNguoiTrongNhom  = this.state.dataNguoiTrongNhom.concat(dataUserInGroup),
         );
+      });
     })
 
     //lấy tên người đang đăng nhập theo email
@@ -196,25 +200,60 @@ export default class KhoanChi extends Component {
             ngayMua:dataSnapshot.child('ngayMua').val(),
             idData: dataSnapshot.key
         })
-        this.setState(
-            this.state.dataSource  = this.state.dataSource.concat(dataKhoanChi),
+        this.setState({
+            dataSource: this.state.dataSource  = this.state.dataSource.concat(dataKhoanChi),
+        }
+          
         );
     });
+    this.setState({refreshing: false})
    }
 
    themKhoanChi = () => {
-    this._panel.hide(),
-    this.setData()
+       if(this.state.iconLoai !=""&&this.state.tenLoai!=""){
+            if(this.state.noiDung!=""){
+                if(this.state.giaTien!= 0){
+                    if(this.state.ngayMua !=""){
+                        if(this.state.nguoiThamGia.length!=0){
+                            this._panel.hide(),
+                            this.setData()
+                        }else{
+                            Alert.alert('Cảnh báo', 'Bạn cần chọn người tham gia khoản chi')
+                        }
+                    }else{
+                        Alert.alert('Cảnh báo', 'Bạn cần chọn ngày khoản chi')
+                    }
+                }else{
+                    Alert.alert('Cảnh báo', 'Bạn cần nhập giá tiền khoản chi')
+                }
+            }else{
+                Alert.alert('Cảnh báo', 'Bạn cần nhập nội dung khoản chi')
+            }
+       }else{
+           Alert.alert('Cảnh báo', 'Bạn cần chọn loại khoản chi')
+       }
+  
    }
-
+   onRefresh (){
+    this.setState({
+        dataSource:this.state.dataSource=  [],
+        refreshing: true,
+    });
+   this.getData()
+   
+}
     render(){
         const _draggedValue = new Animated.Value(50);
         return(
+         
             <View style ={{flex: 1, justifyContent:'flex-end', alignItems: 'flex-end', }}>
                 <Text style = {{fontFamily: defines.font, fontSize: defines.sizeText, color: 'red', fontWeight:'bold', paddingRight: 10}}>Quy đổi: 1K = 1.000 VNĐ</Text>
                 <Text style = {{fontFamily: defines.font, fontSize: defines.sizeText, color: 'red', fontWeight:'bold', paddingRight: 10}}>1TR = 1.000.000 VNĐ</Text>
                 <View style = {{flex: 1, width: width}} >
                <FlatList 
+                 refreshControl = {
+                    <RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh.bind(this)} />
+                }
                data = {this.state.dataSource}
                renderItem = {({item}) => <View style = {{paddingBottom: 10}}>
                    <ListKhoanChi listData = {item}/>
@@ -225,53 +264,57 @@ export default class KhoanChi extends Component {
             </View>
                 <SlidingUpPanel
                     ref={c => this._panel = c}
-                    draggableRange = {{top: height - 115, bottom: 50 }}
+                    draggableRange = {{top: height - 80, bottom: 50 }}
                     animatedValue = {_draggedValue}
                     backdropOpacity = {0.2}
-                    snappingPoints = {[0]}
-                    height = {height - 125}
+                    height = {height - 100}
                     friction = {0.9}
                     containerStyle = {{width: width - 20, marginLeft: 10,}}
+                    allowDragging = {false}
+                    avoidKeyboard
                     >
-                 <View style = {{flex: 1}}>
-                 <View style = {{flex: 1, height: 50, borderRadius: 24, alignItems: 'center'}}>
-                        <TouchableOpacity
-                        onPress = {()=> {this._panel.show()}}
-                        >
-                        <View style ={styles.buttom}> 
-                            <Icon 
-                            name="plus" 
-                            color= {'white'} 
-                            size= {40}
-                            />
+                 <ScrollView style = {{flex: 10}}>
+
+                    <View style = {{ height: 50, borderRadius: 24, alignItems: 'center'}}>
+                            <TouchableOpacity
+                            onPress = {()=> this._panel.show()}
+                            >
+                            <View style ={styles.buttom}> 
+                                <Icon 
+                                name="plus" 
+                                color= {'white'} 
+                                size= {40}
+                                />
+                            </View>
+                            </TouchableOpacity>
                         </View>
-                        </TouchableOpacity>
-                    </View>
                     
-                    <View style = {{flex:9, height: height - 180, backgroundColor: 'white', borderRadius: 24, justifyContent: 'center', alignItems: 'center', flexDirection:'column-reverse'}}>
-                        
+                    <View style = {{height: height - 130, backgroundColor: 'white', borderRadius: 24, justifyContent: 'center', alignItems: 'center', flexDirection:'column-reverse'}}>
                         {/* Buttom điều hướng */}
-                        <View style = {styles.viewThongTin}>
-                            <TouchableOpacity
-                            onPress = {()=> {this.themKhoanChi()}}
-                            >
-                                <View style  ={{width: 120, height: 40, backgroundColor: '#1BAC98', alignItems: 'center', paddingTop: 5, borderRadius: 20, borderWidth: 1}}>
-                                <Text style = {styles.btnTitle}>Thêm</Text>
+                        <View style = {{height: 50,  width: width - 60, flexDirection:'row', justifyContent:'space-between'}}>
+                                        <TouchableOpacity
+                                        onPress = {()=> {
+                                            this.themKhoanChi()}}
+                                        >
+                                            <View style  ={{width: 120, height: 40, backgroundColor: '#1BAC98', alignItems: 'center', paddingTop: 5, borderRadius: 20, borderWidth: 1}}>
+                                            <Text style = {styles.btnTitle}>Thêm</Text>
+                                                </View>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                        onPress = {()=>{
+                                            this._panel.hide()
+                                            this.setState({
+                                                nguoiThamGia: this.state.nguoiThamGia = []
+                                            })
+                                        }}
+                                        >
+                                            <View style  ={{width: 120, height: 40, backgroundColor: '#FF0000',alignItems: 'center', paddingTop: 5,borderRadius: 20, borderWidth: 1}}>
+                                            <Text style = {styles.btnTitle}>Hủy</Text>
+                                                </View>
+                                        </TouchableOpacity>
                                     </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                            onPress = {()=> {
-                            this._panel.hide()
-                            
-                            }}
-                            >
-                                <View style  ={{width: 120, height: 40, backgroundColor: '#FF0000',alignItems: 'center', paddingTop: 5,borderRadius: 20, borderWidth: 1}}>
-                                <Text style = {styles.btnTitle}>Hủy</Text>
-                                    </View>
-                            </TouchableOpacity>
-                        </View>
-                    
-                        <ScrollView scrollEnabled = {true} style = {{flexDirection:'column-reverse', height: height - 200}}>
+                        
+                        <KeyboardAvoidingView style = {{height:height-250, paddingTop: 0}}>
                             {/* Loại chi */}
                             <View style = {styles.viewThongTin}>
                                 <Text style = {styles.title}>Loại chi</Text>
@@ -307,11 +350,13 @@ export default class KhoanChi extends Component {
                                 <Text style = {styles.title}>Nội dung</Text>
                                 <View style = {styles.viewTextInput}>
                                     <TextInput
-                                    style = {styles.titleInput}
+                                    placeholder= "Nhập chi tiết khoản chi"
+                                    style = {[styles.titleInput],{flex:1}}
                                      onChange = {(nd) =>this.setState({
                                         noiDung: nd.nativeEvent.text
                                     })}
                                     value = {this.state.noiDung} 
+                                    autoCapitalize="none"
                                     />
                                    
                                 </View>
@@ -323,12 +368,15 @@ export default class KhoanChi extends Component {
                                 <View style = {styles.viewTextInput}>
                                     <View style = {{width: 160, height: 40 }}>
                                         <TextInput 
+                                        placeholder = "nhập giá tiền"
                                             style = {styles.titleInput}
+                                            defaultValue=""
                                             onChange = {(gia)=>this.setState({
                                                 giaTien: gia.nativeEvent.text
                                             })}
                                             keyboardType={'numeric'}
                                             value = {this.state.giaTien.toString()}  
+                                            autoCapitalize="none"
                                         />
                                     </View>
                                     <Text style = {styles.title}>vnđ</Text>
@@ -341,11 +389,13 @@ export default class KhoanChi extends Component {
                                 <View style = {styles.viewTextInput}>
                                     <View style = {{width: 165, height: 40}}>
                                         <TextInput 
+                                        placeholder = "Chọn ngày mua"
                                             style = {styles.titleInput}
                                             value = {this.state.ngayMua}
                                             onChange = {(ngayMua)=>this.setState({
                                                 ngayMua: ngayMua.nativeEvent.text
                                             })}
+                                            autoCapitalize="none"
                                                 
                                         /> 
                                     </View>
@@ -402,8 +452,8 @@ export default class KhoanChi extends Component {
                                     itemStyle={{
                                         justifyContent: 'flex-start'
                                     }}
-                                    multipleText = " đã chọn %d"
-                                    dropDownStyle={{backgroundColor: 'white',borderColor: 'black', borderWidth: 1, height: 80}}
+                                    multipleText = {this.state.nguoiThamGia.length!== 0? "đã chọn %d": "Chọn người"}
+                                    dropDownStyle={{backgroundColor: 'white',borderColor: 'black', borderWidth: 1, height: 100}}
                                     onChangeItem={item => {
                                         this.setState({
                                         nguoiThamGia: this.state.nguoiThamGia = item
@@ -418,19 +468,21 @@ export default class KhoanChi extends Component {
                                 <Text style = {styles.title}
                                 >Ghi chú</Text>
                                 <View style = {{width: 200, height: 80, borderWidth: 1 ,borderRadius: 5}}>
-                                    <TextInput style = {styles.titleInput} 
+                                    <TextInput style = {[styles.titleInput], {flex: 1}} 
                                     multiline
                                     onChange = {(ghiChu)=>this.setState({
                                         ghiChu: ghiChu.nativeEvent.text
                                     })}
                                     value = {this.state.ghiChu}
+                                    autoCapitalize="none"
                                     />
                                 </View>
                             </View>
                                 
-                        </ScrollView>
-                        {/* tiêu đề */}
-                        <View style = {{paddingTop: 10,  flex: 0.1}}>
+                        </KeyboardAvoidingView>
+                        
+                         {/* tiêu đề */}
+                         <View style = {{paddingTop: 0, height: 40}}>
                             <Text style = {{
                                 fontSize: 20,
                                 fontWeight: 'bold',
@@ -438,7 +490,7 @@ export default class KhoanChi extends Component {
                                 fontFamily: defines.font, 
                             }}>THÊM KHOẢN CHI TIÊU</Text>
                         </View>
-
+                     
                         {/* ngày tháng */}
                         {this.state.show && (
                             <DateTimePicker
@@ -453,11 +505,14 @@ export default class KhoanChi extends Component {
                         )}
                     </View>
         
-                 </View>
+                          
+                 </ScrollView>
+                 
                 </SlidingUpPanel>
                 
             </View>
-        )
+       
+       )
     }
 
     componentDidMount(){
@@ -511,9 +566,11 @@ export default class KhoanChi extends Component {
     },
     viewThongTin:{
         width: width - 60,
-        paddingBottom: 10,
+        height: (height - 180)/11,
+        paddingBottom: 5,
         flexDirection: 'row', 
         justifyContent: 'space-between',
+       
     }
  })
 

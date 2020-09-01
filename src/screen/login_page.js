@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, TouchableOpacity,StyleSheet,ScrollView, TextInput, Alert, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity,StyleSheet,ScrollView, TextInput, Alert, Dimensions, ActivityIndicator } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {firebaseApp} from '../component/FirebaseConfig'
 import * as Animatable from 'react-native-animatable';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-community/async-storage';
-
+const {width, height} = Dimensions.get('screen')
 export default class LoginPage extends React.Component {
     constructor(props){
         super(props);
@@ -18,9 +18,8 @@ export default class LoginPage extends React.Component {
         secureTextEntry: true,
         isValidUser: true,
         isValidPassword: true,
+        isLoading: false
        }
-       this.getData()
-      
     }
      storeData = async (tk, mk) => {
         try {
@@ -40,6 +39,8 @@ export default class LoginPage extends React.Component {
              console.log(mk);
              this.dangNhap(tk,mk)
          }
+         console.log(tk);
+         console.log(mk);
         //  this.dangNhap(tk, mk)
          
         } catch(e) {
@@ -51,10 +52,9 @@ export default class LoginPage extends React.Component {
       }
     dangNhap(taikhoan, matkhau){
         firebaseApp.auth().signInWithEmailAndPassword(taikhoan, matkhau).then(
-            (props)=>{
-               this.storeData(taikhoan, matkhau)
-                this.props.navigation.navigate('MainPage', {taikhoan: props.user.email})}
-        ).catch(function(error){
+            this.storeData(taikhoan, matkhau),
+            this.props.navigation.navigate('MainPage', {taikhoan: this.state.username})
+        ).then(this.setState({isLoading: false})).catch(function(error){
             Alert.alert(
                 'Thông báo',
                 'Đăng nhập thất bại',
@@ -119,7 +119,7 @@ export default class LoginPage extends React.Component {
                     <Animatable.Image 
                         animation="bounceIn"
                         duraton="1500"
-                    source={require('../../assets/image/icon_app.png')}
+                    source={{uri:'https://firebasestorage.googleapis.com/v0/b/room-manager-94bb0.appspot.com/o/icon_app.png?alt=media&token=5f8abb56-0937-4f7e-a737-b4cfdc5a5bd9'}}
                     style={styles.logo}
                     resizeMode="stretch"
                     />
@@ -127,6 +127,7 @@ export default class LoginPage extends React.Component {
                 <Text style = {styles.title_header}>ROOM MANAGER</Text>
                 
                  </Animatable.View>
+
                  <Animatable.View 
             animation="fadeInUpBig"
             style={[styles.footer, {
@@ -148,8 +149,8 @@ export default class LoginPage extends React.Component {
                     style={[styles.textInput, {
                         color: 'black'
                     }]}
-                    autoCapitalize="none"
                     onChangeText={(val) =>this.textInputChange(val)}
+                    autoCapitalize="none"
                     onEndEditing={(e)=>this.handleValidUser(e.nativeEvent.text)}
                 />
                 {this.state.check_textInputChange ? 
@@ -220,10 +221,15 @@ export default class LoginPage extends React.Component {
             >
                 <Text style={{color: '#009387', marginTop:15}}>Quên mật khẩu?</Text>
             </TouchableOpacity>
-            <View style={styles.button}>
+           {
+               this.state.isLoading?<ActivityIndicator size={50} color="#0000ff" />:
+                <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    onPress={() => this.dangNhap(this.state.username, this.state.password)}
+                    onPress={() =>{
+                        this.setState({isLoading: true})
+                        this.dangNhap(this.state.username, this.state.password)
+                    }}
                 >
                 <LinearGradient
                     colors={['#08d4c4', '#01ab9d']}
@@ -235,6 +241,7 @@ export default class LoginPage extends React.Component {
                 </LinearGradient>
                 </TouchableOpacity>
             </View>
+           }
         </Animatable.View>
             </ScrollView>
         </LinearGradient>

@@ -10,12 +10,15 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 const TopTab = createMaterialTopTabNavigator();
 
 export default class TabNhom extends React.Component {
+    constructor(props){
+        super(props);
+    }
     render(){
         return(
             <View style= {{flex: 1, }}>
             <TopTab.Navigator tabBar={props => <TopTabBar {...props}/>} initialRouteName = "tabKhoanChi">
-                <TopTab.Screen name = "tabTongQuan" component = {TongQuan} options = {{title: 'Tổng quan'}} initialParams = {{email: this.props.route.params.email}}/>
-                <TopTab.Screen name = "tabKhoanChi" component = {KhoanChi} options = {{title: 'Khoản chi'}} initialParams = {{email: this.props.route.params.email}}/>
+                <TopTab.Screen name = "tabTongQuan" component = {TongQuan} options = {{title: 'Tổng quan'}} initialParams = {{email: this.props.taikhoan}}/>
+                <TopTab.Screen name = "tabKhoanChi" component = {KhoanChi} options = {{title: 'Khoản chi'}} initialParams = {{email: this.props.taikhoan}}/>
                 {/* <TopTab.Screen name = "tabThongKe" component = {ThongKe} options = {{title: 'Thống kê'}} initialParams = {{email: this.props.route.params.email}}/> */}
             </TopTab.Navigator>
             </View>
