@@ -9,8 +9,7 @@ import { View,
      TextInput,
     Image,
     ScrollView,
-    Alert,RefreshControl,
-    KeyboardAvoidingView
+    Alert,RefreshControl
      } from 'react-native';
 import ListKhoanChi from '../component/listKhoanChi'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -264,10 +263,10 @@ export default class KhoanChi extends Component {
             </View>
                 <SlidingUpPanel
                     ref={c => this._panel = c}
-                    draggableRange = {{top: height - 80, bottom: 50 }}
+                    draggableRange = {{top: height - 110, bottom: 50 }}
                     animatedValue = {_draggedValue}
                     backdropOpacity = {0.2}
-                    height = {height - 100}
+                    height = {height - 125}
                     friction = {0.9}
                     containerStyle = {{width: width - 20, marginLeft: 10,}}
                     allowDragging = {false}
@@ -289,7 +288,7 @@ export default class KhoanChi extends Component {
                             </TouchableOpacity>
                         </View>
                     
-                    <View style = {{height: height - 130, backgroundColor: 'white', borderRadius: 24, justifyContent: 'center', alignItems: 'center', flexDirection:'column-reverse'}}>
+                    <View style = {{height: height - 180, backgroundColor: 'white', borderRadius: 24, justifyContent: 'center', alignItems: 'center', flexDirection:'column-reverse'}}>
                         {/* Buttom điều hướng */}
                         <View style = {{height: 50,  width: width - 60, flexDirection:'row', justifyContent:'space-between'}}>
                                         <TouchableOpacity
@@ -314,7 +313,7 @@ export default class KhoanChi extends Component {
                                         </TouchableOpacity>
                                     </View>
                         
-                        <KeyboardAvoidingView style = {{height:height-250, paddingTop: 0}}>
+                        <View style = {{height:height-300, paddingTop: 0}}>
                             {/* Loại chi */}
                             <View style = {styles.viewThongTin}>
                                 <Text style = {styles.title}>Loại chi</Text>
@@ -479,7 +478,7 @@ export default class KhoanChi extends Component {
                                 </View>
                             </View>
                                 
-                        </KeyboardAvoidingView>
+                        </View>
                         
                          {/* tiêu đề */}
                          <View style = {{paddingTop: 0, height: 40}}>
