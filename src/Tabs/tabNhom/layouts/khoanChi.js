@@ -231,7 +231,7 @@ export default class KhoanChi extends Component {
        }else{
            Alert.alert('Cảnh báo', 'Bạn cần chọn loại khoản chi')
        }
-  
+       console.log('ok');
    }
    onRefresh (){
     this.setState({
